@@ -4,9 +4,9 @@ Memory - 1 GB
 Storage - 20 GB
 
 => User Resources
-CPU Guarantee - 0.2
-CPU Usage limit - 1
-Storage limit - 2 GB
+CPU Guarantee - Nil
+CPU Usage limit - 0.5
+Storage limit - 1 GB
 
 => Pre-installed packages 
 
