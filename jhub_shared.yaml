@@ -1,0 +1,73 @@
+proxy:
+  secretToken: "5c1a6abb63d8c641f1d20bee3c9afb593a859d93f94d17fa6f7c1de55c6c9327"
+
+singleuser:
+  profileList:
+    - display_name: "Python - Basic"
+      description: "Basic resources to run the tutorials. Storage capacity - 1Gi | CPU limit - 0.5"
+      kubespawner_override:
+        cpu_limit: .5
+        lifecycle_hooks:
+          postStart:
+            exec:
+              command: ["gitpuller", "https://github.com/sampathkethineedi/ml_notebooks.git", "learn","notebooks_learn"]
+    - display_name: "Python - Explore"
+      description: "Additional system resources. Storage capacity - 2Gi | CPU limit - 1 | CPU guarantee - 0.2"
+      kubespawner_override:
+        cpu_limit: 1
+        cpu_guarantee: .2
+        storage_capacity: 2Gi
+        lifecycle_hooks:
+          postStart:
+            exec:
+              command: ["gitpuller", "https://github.com/sampathkethineedi/ml_notebooks.git", "explore","notebooks_explore"]
+    - display_name: "Julia - Basic"
+      description: "Julia environment | Additional system resources. Storage capacity - 1Gi | CPU limit -0.5"
+      kubespawner_override:
+        image: sampathkethineedi/jhub-julia:0.2
+        cpu_limit: 0.5
+        lifecycle_hooks:
+          postStart:
+            exec:
+              command: ["gitpuller", "https://github.com/sampathkethineedi/ml_notebooks.git", "julia","notebooks_julia"]
+  storage:
+    capacity: 1Gi
+    extraVolumes:
+      - name: jupyterhub-shared
+        persistentVolumeClaim:
+          claimName: jupyterhub-shared-volume
+    extraVolumeMounts:
+      - name: jupyterhub-shared
+        mountPath: /home/public
+  image:
+    name: sampathkethineedi/mlnotebooks
+    tag: test01
+  lifecycleHooks:
+    postStart:
+      exec:
+        command: ["gitpuller", "https://github.com/sampathkethineedi/ml_notebooks.git", "learn","notebooks"]
+
+prePuller:
+  enabled: false
+
+
+hub:
+  image: 
+    name: sampathkethineedi/jhub-k8s
+    tag: 0.4
+  extraEnv:
+    GITLAB_URL: https://ec2-18-212-65-156.compute-1.amazonaws.com
+
+
+auth:
+  type: gitlab
+  gitlab:
+    clientId: "f1a975967474605fd4dd057452c3ea004c556ab0495b357f6b4ac0b3780a946d"
+    clientSecret: "5f87ba5d46dccb52604817c4c0dae280d1c9423fc444d4a6959a537f7833d244"
+    callbackUrl: "http://af7089468a20c11e9967202adec6e78c-1958435845.us-east-2.elb.amazonaws.com/hub/oauth_callback"
+    gitlabGroupWhitelist:
+      - myml_group
+  admin:
+    access: true
+    users:
+      - sampathkethineedi

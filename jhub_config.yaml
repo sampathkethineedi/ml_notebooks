@@ -1,0 +1,43 @@
+proxy:
+  secretToken: "5c1a6abb63d8c641f1d20bee3c9afb593a859d93f94d17fa6f7c1de55c6c9327"
+
+singleuser:
+  storage:
+    capacity: 2Gi
+  image:
+    name: sampathkethineedi/mlnotebooks
+    tag: test01
+  lifecycleHooks:
+    postStart:
+      exec:
+        command: ["gitpuller", "https://github.com/sampathkethineedi/ml_notebooks.git", "master", "ml_notebooks"]
+
+#hub:
+ # extraConfig: |
+  #  c.JupyterHub.logo_file = "http://assets-news-bcdn-ll.dailyhunt.in/cmd/resize/400x400_60/fetchdata13/images/bd/05/d5/bd05d5d64896c35b0e227dfe26925620.jpg"
+
+
+prePuller:
+  enabled: false
+
+
+auth:
+  auth:
+  type: github
+  github:
+    clientId: "a94d5a35fa9e3c41049b"
+    clientSecret: "3b211a9d4dbff133863b3514342b92ab662402ad"
+    callbackUrl: "http://a37783730966111e9b7bb061b974a97d-1931922049.us-east-2.elb.amazonaws.com/hub/oauth_callback"
+  admin:
+    users:
+      - sampathkethineedi
+      - admin
+      - admin_sampath
+  whitelist:
+    users:
+      - admin
+      - admin_sampath
+      - ishan
+      - hardik
+      - sampath
+
